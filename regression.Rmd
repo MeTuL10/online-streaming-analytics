@@ -1,0 +1,42 @@
+---
+title: "linear regression"
+output: html_notebook
+---
+
+LINEAR REGRESSION
+```{r}
+df=read.csv("D:/vit/sem5/fda/jcomp/twitchdata_eda.csv")
+library(caTools)
+plot(df)
+
+```
+```{r}
+cor(df$Views.gained,df$Watch.time.Minutes.)
+cor(df$Views.gained,df$Followers)
+cor(df$Views.gained,df$Followers.gained)
+cor(df$Views.gained,df$Peak.viewers)
+
+```
+
+```{r}
+split = sample.split(df$Views.gained, SplitRatio = 0.8)
+training_set = subset(df, split == TRUE)
+test_set = subset(df, split == FALSE)
+head(df)
+
+```
+
+```{r}
+model=lm(Views.gained~Peak.viewers+Watch.time.Minutes.,training_set)
+model
+library(car)
+avPlots(model)
+summary(model)
+
+```
+```{r}
+library(Metrics)
+ypred=predict(model,newdata=test_set)
+mape(test_set$Views.gained,ypred)
+```
+
