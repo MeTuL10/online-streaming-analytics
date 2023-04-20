@@ -1,0 +1,120 @@
+---
+title: "classification"
+output: html_notebook
+---
+
+DECISION TREE
+```{r}
+
+set.seed(150)
+df=read.csv("D:/vit/sem5/fda/jcomp/twitchdata_eda.csv")
+df=df[,c(-1,-2)]
+library(caret)
+library(caTools)
+library(party)
+library(dplyr)
+library(magrittr)
+head(df)
+
+```
+```{r}
+lang=factor(df$Language)
+df$Language=as.numeric(factor(df$Language))
+partner=factor(df$Partnered)
+df$Partnered=as.numeric(factor(df$Partnered))
+mature=factor(df$Mature)
+df$Mature=as.numeric((factor(df$Mature)))
+tiers=factor(df$channel.Tier)
+df$channel.Tier=as.numeric((factor(df$channel.Tier)))
+
+```
+
+
+```{r}
+x=df[,c(-1,-10,-11)]
+x=x[complete.cases(x),]
+sample_data = sample.split(x, SplitRatio = 0.8)
+train_data <- subset(x, sample_data == TRUE)
+test_data <- subset(x, sample_data == FALSE)
+
+model<- ctree(channel.Tier ~ ., train_data)
+plot(model)
+summary(model)
+```
+```{r}
+ypred<-predict(model, test_data)
+ypred=as.vector(ypred)
+ypred=round(ypred)
+ypred=factor(ypred)
+test_data$channel.Tier=factor(test_data$channel.Tier)
+levels(ypred)=levels(test_data$channel.Tier)
+confusionMatrix(ypred,test_data$channel.Tier)
+```
+
+SVM
+```{r}
+
+library(e1071)
+library(caret)
+set.seed(123)
+df=read.csv("D:/vit/sem5/fda/jcomp/twitchdata_eda.csv")
+df=df[,c(-1,-2)]
+lang=factor(df$Language)
+df$Language=as.numeric(factor(df$Language))
+partner=factor(df$Partnered)
+df$Partnered=as.numeric(factor(df$Partnered))
+mature=factor(df$Mature)
+df$Mature=as.numeric((factor(df$Mature)))
+tiers=factor(df$channel.Tier)
+df$channel.Tier=as.numeric((factor(df$channel.Tier)))
+x=df[,c(-1,-10,-11)]
+x=x[complete.cases(x),]
+head(x)
+```
+
+```{r}
+sample_data = sample.split(x, SplitRatio = 0.8)
+train_data <- subset(x, sample_data == TRUE)
+test_data <- subset(x, sample_data == FALSE)
+classifier = svm(formula = channel.Tier ~ .,data = train_data, type = 'C-classification', kernel = 'radial')
+summary(classifier)
+
+```
+
+```{r}
+ypred <- predict(classifier, test_data)
+ypred=as.vector(ypred)
+ypred=factor(ypred)
+test_data$channel.Tier=factor(test_data$channel.Tier)
+levels(ypred)=levels(test_data$channel.Tier)
+confusionMatrix(ypred,test_data$channel.Tier)
+summary(classifier)
+```
+
+
+RANDOM FOREST
+```{r}
+set.seed(123)
+library(caTools)
+library(randomForest)
+classifier_RF = randomForest(x = train_data[-11], y = train_data$channel.Tier,ntree = 500)
+summary(classifier_RF)
+
+```
+
+```{r}
+ypred = predict(classifier_RF, newdata = test_data[-11])
+ypred=as.vector(ypred)
+ypred=round(ypred)
+ypred=factor(ypred)
+test_data$channel.Tier=factor(test_data$channel.Tier)
+levels(ypred)=levels(test_data$channel.Tier)
+confusionMatrix(ypred,test_data$channel.Tier)
+```
+comparing classification model accuracies
+```{r}
+models=c("DT","SVM","RF")
+acc=c(0.6421,0.6921,0.5368)
+barplot(acc,names.arg=models,main="accuracy of models", col=c("orange"))
+```
+
