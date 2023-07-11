@@ -6,7 +6,7 @@ Performed clustering using K medois are heirarchical agglomerative clustering to
 Employed 3 classification models to predict streamers’ positions and regression models to forecast their
 growth providing insights into their potential viewership and popularity.  
 
-Dataset : [link](https://www.kaggle.com/datasets/aayushmishra1512/twitchdata)
+Dataset : [Kaggle](https://www.kaggle.com/datasets/aayushmishra1512/twitchdata)
 ## Authors
 
 - [Metul Prabhu](https://www.github.com/MeTuL10)
