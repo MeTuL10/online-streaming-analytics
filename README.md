@@ -2,7 +2,7 @@
 # Online streaming analytics
 
 Data analytics on Twitch streamers using R programming.  
-Performed clustering using K medois are heirarchical agglomerative clustering to group the streamers together.  
+Performed clustering using K medoids aand heirarchical agglomerative clustering to group the streamers together.  
 Employed 3 classification models to predict streamers’ positions and regression models to forecast their
 growth providing insights into their potential viewership and popularity.  
 
